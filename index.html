@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐴 马成游戏厅</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);min-height:100vh;color:#fff;}
+.home-page{text-align:center;padding:40px 20px;}
+.home-page h1{font-size:2.8em;margin-bottom:10px;background:linear-gradient(90deg,#ff6b6b,#feca57,#48dbfb,#ff9ff3);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.home-page p{color:#aaa;font-size:1.1em;margin-bottom:40px;}
+.game-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;max-width:1200px;margin:0 auto;padding:0 20px;}
+.game-card{background:rgba(255,255,255,0.08);border-radius:18px;padding:28px;cursor:pointer;transition:all .3s;border:1px solid rgba(255,255,255,0.1);}
+.game-card:hover{transform:translateY(-6px);background:rgba(255,255,255,0.15);box-shadow:0 12px 35px rgba(0,0,0,0.4);}
+.game-card .icon{font-size:2.8em;margin-bottom:12px;}
+.game-card h3{font-size:1.2em;margin-bottom:8px;}
+.game-card p{color:#888;font-size:0.88em;line-height:1.4;}
+.game-page{display:none;padding:20px;max-width:620px;margin:0 auto;text-align:center;}
+.back-btn{background:rgba(255,255,255,0.1);border:none;color:#fff;padding:9px 20px;border-radius:10px;cursor:pointer;font-size:1em;margin-bottom:20px;transition:background .3s;}
+.back-btn:hover{background:rgba(255,255,255,0.2);}
+.game-title{font-size:2em;margin-bottom:8px;}
+.game-desc{color:#aaa;margin-bottom:18px;font-size:0.95em;}
+.game-area{background:rgba(0,0,0,0.3);border-radius:18px;padding:28px;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.score-board{display:flex;justify-content:center;gap:28px;margin-bottom:18px;font-size:1.05em;}
+.score-board span{color:#feca57;}
+.btn{background:linear-gradient(135deg,#667eea,#764ba2);border:none;color:#fff;padding:13px 36px;border-radius:28px;font-size:1em;cursor:pointer;margin:8px;transition:transform .2s,box-shadow .2s;}
+.btn:hover{transform:scale(1.04);box-shadow:0 5px 18px rgba(102,126,234,0.5);}
+.btn.green{background:linear-gradient(135deg,#11998e,#38ef7d);}
+.btn.red{background:linear-gradient(135deg,#eb3349,#f45c43);}
+.number-display{font-size:3.5em;font-weight:bold;margin:15px 0;min-height:70px;}
+.choice-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
+.type-input{width:100%;padding:13px;font-size:1.1em;border:2px solid rgba(255,255,255,0.3);border-radius:10px;background:rgba(0,0,0,0.3);color:#fff;text-align:center;outline:none;}
+.type-input:focus{border-color:#667eea;}
+.type-word{font-size:2.2em;font-weight:bold;color:#feca57;margin:12px 0;letter-spacing:3px;}
+.result-text{font-size:1.4em;margin:12px 0;}
+.result-text.win{color:#38ef7d;}
+.result-text.lose{color:#eb3349;}
+.result-text.draw{color:#feca57;}
+.result-time{font-size:1.1em;color:#48dbfb;margin:8px 0;}
+.memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;max-width:380px;margin:0 auto;}
+.memory-card{aspect-ratio:1;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.9em;transition:transform .3s;user-select:none;}
+.memory-card.flipped{background:#fff;color:#333;transform:rotateY(180deg);}
+.memory-card.matched{background:#38ef7d;opacity:0.55;cursor:default;}
+.tic-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;max-width:240px;margin:0 auto;}
+.tic-cell{aspect-ratio:1;background:rgba(255,255,255,0.1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:2.4em;cursor:pointer;transition:background .2s;}
+.tic-cell:hover{background:rgba(255,255,255,0.2);}
+.rps-btns{display:flex;gap:14px;justify-content:center;}
+.rps-btn{font-size:2.8em;background:none;border:none;cursor:pointer;transition:transform .2s;padding:8px;}
+.rps-btn:hover{transform:scale(1.18);}
+.reaction-area{width:190px;height:190px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1em;cursor:pointer;transition:all .3s;user-select:none;}
+.reaction-area.waiting{background:#eb3349;}
+.reaction-area.ready{background:#38ef7d;}
+.color-word{font-size:2.8em;font-weight:bold;margin:18px 0;text-transform:uppercase;}
+.breakout-area{position:relative;width:400px;height:300px;background:rgba(0,0,0,0.4);border-radius:10px;overflow:hidden;margin:0 auto;}
+.breakout-paddle{position:absolute;bottom:10px;width:80px;height:12px;background:linear-gradient(90deg,#667eea,#764ba2);border-radius:6px;}
+.breakout-ball{position:absolute;width:12px;height:12px;background:#fff;border-radius:50%;}
+.brick{position:absolute;height:20px;border-radius:4px;}
+.breakout-score{font-size:1.4em;color:#feca57;margin-bottom:12px;}
+.floppy-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:340px;margin:0 auto;}
+.floppy-cell{aspect-ratio:1;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4em;transition:all .3s;}
+.floppy-cell.revealed{background:#fff;color:#333;}
+.floppy-cell.matched{background:#38ef7d;}
+</style>
+</head>
+<body>
+
+<!-- 主页 -->
+<div id="home" class="home-page">
+  <h1>🐴 马成游戏厅</h1>
+  <p>10个简单有趣的小游戏，轻松一下~</p>
+  <div class="game-grid">
+    <div class="game-card" onclick="showGame('guess')"><div class="icon">🔢</div><h3>猜数字</h3><p>1-100的数字，看你几次猜中！</p></div>
+    <div class="game-card" onclick="showGame('memory')"><div class="icon">🃏</div><h3>记忆翻牌</h3><p>翻开所有相同的牌！</p></div>
+    <div class="game-card" onclick="showGame('math')"><div class="icon">🧮</div><h3>速算挑战</h3><p>60秒内答对尽量多的题！</p></div>
+    <div class="game-card" onclick="showGame('type')"><div class="icon">⌨️</div><h3>打字测试</h3><p>快速打出显示的单词！</p></div>
+    <div class="game-card" onclick="showGame('rps')"><div class="icon">✊</div><h3>猜拳大战</h3><p>经典石头剪刀布！</p></div>
+    <div class="game-card" onclick="showGame('tic')"><div class="icon">⭕</div><h3>井字棋</h3><p>三子棋挑战电脑！</p></div>
+    <div class="game-card" onclick="showGame('reaction')"><div class="icon">⚡</div><h3>反应力测试</h3><p>屏幕变绿时立刻点击！</p></div>
+    <div class="game-card" onclick="showGame('color')"><div class="icon">🎨</div><h3>颜色识别</h3><p>说出文字显示的颜色！</p></div>
+    <div class="game-card" onclick="showGame('breakout')"><div class="icon">🏓</div><h3>打砖块</h3><p>用挡板弹球打掉砖块！</p></div>
+    <div class="game-card" onclick="showGame('floppy')"><div class="icon">🫣</div><h3>神经衰弱</h3><p>找出所有配对！</p></div>
+  </div>
+</div>
+
+<!-- 猜数字 -->
+<div id="game-guess" class="game-page">
+  <button class="back-btn" onclick="showHome()">← 返回</button>
+  <h2 class="game-title">🔢 猜数字</h2>
+  <p class="game-desc">我想了一个 1-100 的数字，猜猜是多少？</p>
+  <div class="score-board"><span>尝试次数: <b id="guess-count">0</b></span></div>
+  <div class="game-area">
+    <div class="number-display" id="guess-hint">?</div>
+    <div style="margin-top:12px;">
+      <input type="number" id="guess-input" class="type-input" placeholder="输入1-100的数字" min="1" max="100" style="width:200px;margin-bottom:10px;">
+      <button class="btn green" onclick="guessSubmit()">猜测</button>
+    </div>
+  </div>
+</div>
+
+<!-- 记忆翻牌 -->
+<div id="game-memory" class="game-page">
+  <button class="back-btn" onclick="showHome()">← 返回</button>
+  <h2 class="game-title">🃏 记忆翻牌</h2>
+  <p class="game-desc">找出所有相同的牌！</p>
+  <div class="score-board"><span>用时: <b id="memory-time">0</b>s</span><span>翻牌次数: <b id="memory-moves">0</b></span></div>
+  <div class="game-area">
+    <div class="memory-grid" id="memory-grid"></div>
+    <button class="btn green" onclick="initMemory()" style="margin-top:14px;">重新开始</button>
+  </div>
+</div>
+
+<!-- 速算 -->
+<div id="game-math" class="game-page">
+  <button class="back-btn" onclick="showHome()">← 返回</button>
+  <h2 class="game-title">🧮 速算挑战</h2>
+  <p class="game-desc">60秒内答对尽量多的题目！</p>
+  <div class="score-board"><span>得分: <b id="math-score">0</b></span><span>剩余: <b id="math-time">60</b>s</span></div>
+  <div class="game-area">
+    <div class="type-word" id="math-question">准备好？</div>
+    <div style="display:flex;gap:10px;justify-content:center;align-items:center;">
+      <input type="number" id="math-input" class="type-input" style="width:150px;" placeholder="答案">
+      <button class="btn green" onclick="mathCheck()">回答</button>
+    </div>
+    <div id="math-feedback" style="margin-top:10px;font-size:1.1em;"></div>
+    <button class="btn green" onclick="startMath()" style="margin-top:12px;">开始游戏</button>
+  </div>
+</div>
+
+<!-- 打字 -->
+<div id="game-type" class="game-page">
+  <button class="back-btn" onclick="showHome()">← 返回</button>
+  <h2 class="game-title">⌨️ 打字测试</h2>
+  <p class="game-desc">快速打出下面的单词！</p>
+  <div class="score-board"><span>正确: <b id="type-correct">0</b></span><span>错误: <b id="type-wrong">0</b></span></div>
+  <div class="game-area">
+    <div class="type-word" id="type-word">ready</div>
+    <input type="text" id="type-input" class="type-input" placeholder="输入单词..." autocomplete="off" autofocus>
+    <button class="btn green" onclick="startType()" style="margin-top:12px;">开始</button>
+  </div>
+</div>
+
+<!-- 猜拳 -->
+<div id="game-rps" class="game-page">
+  <button class="back-btn" onclick="showHome()">← 返回</button>
+  <h2 class="game-title">✊ 猜拳大战</h2>
+  <p class="game-desc">石头、剪刀、布！</p>
+  <div class="score-board"><span>你: <b id="rps-you">0</b></span><span>电脑: <b id="rps-comp">0</b></span></div>
+  <div class="game-area">
+    <div style="font-size:2.8em;margin:10px 0;" id="rps-result-display">❓</div>
+    <div class="result-text" id="rps-msg">做出你的选择！</div>
+    <div class="rps-btns">
+      <button class="rps-btn" onclick="playRPS(0)">✊</button>
+      <button class="rps-btn" onclick="playRPS(1)">✌️</button>
+      <button class="rps-btn" onclick="playRPS(2)">✋</button>
+    </div>
+  </div>
+</div>
+
+<!-- 井字棋 -->
+<div id="game-tic" class="game-page">
+  <button class="back-btn" onclick="showHome()">← 返回</button>
+  <h2 class="game-title">⭕ 井字棋</h2>
+  <p class="game-desc">你是 X，先手！</p>
+  <div class="score-board"><span>你: <b id="tic-you">0</b></span><span>平局: <b id="tic-draw">0</b></span><span>电脑: <b id="tic-comp">0</b></span></div>
+  <div class="game-area">
+    <div class="tic-grid" id="tic-grid"></div>
+    <button class="btn green" onclick="initTic()" style="margin-top:14px;">重新开始</button>
+  </div>
+</div>
+
+<!-- 反应力 -->
+<div id="game-reaction" class="game-page">
+  <button class="back-btn" onclick="showHome()">← 返回</button>
+  <h2 class="game-title">⚡ 反应力测试</h2>
+  <p class="game-desc">等待屏幕变绿时立即点击！</p>
+  <div class="score-board"><span>最快: <b id="best-time">--</b> ms</span></div>
+  <div class="game-area">
+    <div class="reaction-area waiting" id="reaction-area" onclick="reactionClick()">点击开始</div>
+    <div id="reaction-msg" class="result-time"></div>
+    <button class="btn green" onclick="startReaction()" style="margin-top:14px;">重新测试</button>
+  </div>
+</div>
+
+<!-- 颜色识别 -->
+<div id="game-color" class="game-page">
+  <button class="back-btn" onclick="showHome()">← 返回</button>
+  <h2 class="game-title">🎨 颜色识别</h2>
+  <p class="game-desc">说出文字显示的<span style="font-weight:bold;">颜色</span>，不是文字！</p>
+  <div class="score-board"><span>得分: <b id="color-score">0</b></span></div>
+  <div class="game-area">
+    <div class="color-word" id="color-word">红色</div>
+    <div class="choice-btns">
+      <button class="btn" style="background:#ff0000;" onclick="colorGuess('红')">红</button>
+      <button class="btn" style="background:#00ff00;" onclick="colorGuess('绿')">绿</button>
+      <button class="btn" style="background:#0000ff;" onclick="colorGuess('蓝')">蓝</button>
+      <button class="btn" style="background:#ffff00;color:#333;" onclick="colorGuess('黄')">黄</button>
+    </div>
+    <div id="color-feedback" style="margin-top:10px;font-size:1.1em;"></div>
+  </div>
+</div>
+
+<!-- 打砖块 -->
+<div id="game-breakout" class="game-page">
+  <button class="back-btn" onclick="showHome()">← 返回</button>
+  <h2 class="game-title">🏓 打砖块</h2>
+  <p class="game-desc">用挡板弹球打掉所有砖块！← → 移动挡板</p>
+  <div class="breakout-score">得分: <b id="breakout-score">0</b></div>
+  <div class="game-area">
+    <div class="breakout-area" id="breakout-area">
+      <div class="breakout-paddle" id="breakout-paddle"></div>
+      <div class="breakout-ball" id="breakout-ball"></div>
+    </div>
+    <button class="btn green" onclick="startBreakout()" id="breakout-btn" style="margin-top:12px;">开始游戏</button>
+  </div>
+</div>
+
+<!-- 神经衰弱 -->
+<div id="game-floppy" class="game-page">
+  <button class="back-btn" onclick="showHome()">← 返回</button>
+  <h2 class="game-title">🫣 神经衰弱</h2>
+  <p class="game-desc">找出所有配对！翻开超过2张会重置！</p>
+  <div class="score-board"><span>配对: <b id="floppy-pairs">0</b>/8</span></div>
+  <div class="game-area">
+    <div class="floppy-grid" id="floppy-grid"></div>
+    <button class="btn green" onclick="initFloppy()" style="margin-top:14px;">重新开始</button>
+  </div>
+</div>
+
+<script src="games.js"></script>
+</body>
+</html>

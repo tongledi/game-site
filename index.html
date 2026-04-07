@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>🐴 马成游戏厅</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -23,15 +23,15 @@ body{font-family:'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(
 .game-title{font-size:2em;margin-bottom:8px}
 .game-desc{color:#aaa;margin-bottom:18px;font-size:0.95em}
 .game-area{background:rgba(0,0,0,0.3);border-radius:18px;padding:28px;min-height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.score-board{display:flex;justify-content:center;gap:28px;margin-bottom:18px;font-size:1.05em}
+.score-board{display:flex;justify-content:center;gap:28px;margin-bottom:18px;font-size:1.05em;flex-wrap:wrap}
 .score-board span{color:#feca57}
-.btn{background:linear-gradient(135deg,#667eea,#764ba2);border:none;color:#fff;padding:13px 36px;border-radius:28px;font-size:1em;cursor:pointer;margin:8px;transition:transform .2s,box-shadow .2s;display:inline-block}
+.btn{background:linear-gradient(135deg,#667eea,#764ba2);border:none;color:#fff;padding:13px 36px;border-radius:28px;font-size:1em;cursor:pointer;margin:8px;transition:transform .2s,box-shadow .2s;display:inline-block;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .btn:hover{transform:scale(1.04);box-shadow:0 5px 18px rgba(102,126,234,0.5)}
 .btn.green{background:linear-gradient(135deg,#11998e,#38ef7d)}
 .btn.red{background:linear-gradient(135deg,#eb3349,#f45c43)}
 .number-display{font-size:3.5em;font-weight:bold;margin:15px 0;min-height:70px}
 .choice-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-.type-input{width:100%;padding:13px;font-size:1.1em;border:2px solid rgba(255,255,255,0.3);border-radius:10px;background:rgba(0,0,0,0.3);color:#fff;text-align:center;outline:none}
+.type-input{width:100%;max-width:300px;padding:13px;font-size:1.1em;border:2px solid rgba(255,255,255,0.3);border-radius:10px;background:rgba(0,0,0,0.3);color:#fff;text-align:center;outline:none}
 .type-input:focus{border-color:#667eea}
 .type-word{font-size:2.2em;font-weight:bold;color:#feca57;margin:12px 0;letter-spacing:3px}
 .result-text{font-size:1.4em;margin:12px 0}
@@ -40,27 +40,43 @@ body{font-family:'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(
 .result-text.draw{color:#feca57}
 .result-time{font-size:1.1em;color:#48dbfb;margin:8px 0}
 .memory-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;max-width:380px;margin:0 auto}
-.memory-card{aspect-ratio:1;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.9em;transition:transform .3s;user-select:none}
+.memory-card{aspect-ratio:1;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.9em;transition:transform .3s;user-select:none;touch-action:manipulation}
 .memory-card.flipped{background:#fff;color:#333;transform:rotateY(180deg)}
 .memory-card.matched{background:#38ef7d;opacity:0.55;cursor:default}
 .tic-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;max-width:240px;margin:0 auto}
-.tic-cell{aspect-ratio:1;background:rgba(255,255,255,0.1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:2.4em;cursor:pointer;transition:background .2s}
+.tic-cell{aspect-ratio:1;background:rgba(255,255,255,0.1);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:2.4em;cursor:pointer;transition:background .2s;touch-action:manipulation}
 .tic-cell:hover{background:rgba(255,255,255,0.2)}
 .rps-btns{display:flex;gap:14px;justify-content:center}
-.rps-btn{font-size:2.8em;background:none;border:none;cursor:pointer;transition:transform .2s;padding:8px}
+.rps-btn{font-size:2.8em;background:none;border:none;cursor:pointer;transition:transform .2s;padding:8px;touch-action:manipulation}
 .rps-btn:hover{transform:scale(1.18)}
-.reaction-area{width:190px;height:190px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1em;cursor:pointer;transition:all .3s;user-select:none}
+.reaction-area{width:190px;height:190px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1em;cursor:pointer;transition:all .3s;user-select:none;touch-action:manipulation}
 .reaction-area.waiting{background:#eb3349}
 .reaction-area.ready{background:#38ef7d}
 .color-word{font-size:2.8em;font-weight:bold;margin:18px 0;text-transform:uppercase}
-.breakout-area{position:relative;width:400px;height:300px;background:rgba(0,0,0,0.4);border-radius:10px;overflow:hidden;margin:0 auto}
+.breakout-area{position:relative;width:100%;max-width:400px;height:300px;background:rgba(0,0,0,0.4);border-radius:10px;overflow:hidden;margin:0 auto;touch-action:none}
 .breakout-paddle{position:absolute;bottom:10px;width:80px;height:12px;background:linear-gradient(90deg,#667eea,#764ba2);border-radius:6px;left:160px}
 .breakout-ball{position:absolute;width:12px;height:12px;background:#fff;border-radius:50%;left:194px;top:270px}
 .breakout-score{font-size:1.4em;color:#feca57;margin-bottom:12px}
-.floppy-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:340px;margin:0 auto}
-.floppy-cell{aspect-ratio:1;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4em;transition:all .3s}
+.floppy-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:340px;margin:0 auto}
+.floppy-cell{aspect-ratio:1;background:linear-gradient(135deg,#667eea,#764ba2);border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.4em;transition:all .3s;touch-action:manipulation}
 .floppy-cell.revealed{background:#fff;color:#333}
 .floppy-cell.matched{background:#38ef7d}
+@media (max-width:480px){
+.home-page h1{font-size:2em}
+.game-grid{grid-template-columns:repeat(2,1fr);gap:12px;padding:0 10px}
+.game-card{padding:18px}
+.game-card .icon{font-size:2em}
+.game-card h3{font-size:1em}
+.game-card p{font-size:0.8em}
+.game-area{padding:18px;min-height:200px}
+.breakout-area{height:250px}
+.color-word{font-size:2em}
+.type-word{font-size:1.6em}
+.tic-cell{font-size:1.8em}
+.reaction-area{width:150px;height:150px;font-size:0.95em}
+.btn{padding:10px 24px;font-size:0.95em}
+.score-board{gap:14px;font-size:0.95em}
+}
 </style>
 </head>
 <body>
@@ -90,7 +106,7 @@ body{font-family:'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(
   <div class="game-area">
     <div class="number-display" id="gh">?</div>
     <div style="margin-top:12px">
-      <input type="number" id="gi" class="type-input" placeholder="输入1-100的数字" min="1" max="100" style="width:200px;margin-bottom:10px">
+      <input type="number" id="gi" class="type-input" placeholder="输入1-100的数字" min="1" max="100">
       <button class="btn green" onclick="guessSubmit()">猜测</button>
     </div>
   </div>
@@ -114,7 +130,7 @@ body{font-family:'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(
   <div class="score-board"><span>得分: <b id="ms">0</b></span><span>剩余: <b id="mt2">60</b>s</span></div>
   <div class="game-area">
     <div class="type-word" id="mq">准备好？</div>
-    <div style="display:flex;gap:10px;justify-content:center;align-items:center">
+    <div style="display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap">
       <input type="number" id="mi" class="type-input" style="width:150px" placeholder="答案">
       <button class="btn green" onclick="mathCheck()">回答</button>
     </div>
@@ -130,7 +146,7 @@ body{font-family:'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(
   <div class="score-board"><span>正确: <b id="tc">0</b></span><span>错误: <b id="tw">0</b></span></div>
   <div class="game-area">
     <div class="type-word" id="tw2">ready</div>
-    <input type="text" id="ti" class="type-input" placeholder="输入单词..." autocomplete="off">
+    <input type="text" id="ti" class="type-input" placeholder="输入单词..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
     <button class="btn green" onclick="startType()" style="margin-top:12px">开始</button>
   </div>
 </div>
@@ -168,7 +184,7 @@ body{font-family:'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(
   <p class="game-desc">等待屏幕变绿时立即点击！</p>
   <div class="score-board"><span>最快: <b id="bt">--</b> ms</span></div>
   <div class="game-area">
-    <div class="reaction-area waiting" id="ra" onclick="reactionClick()">点击开始</div>
+    <div class="reaction-area waiting" id="ra">点击开始</div>
     <div id="rm2" class="result-time"></div>
     <button class="btn green" onclick="startReaction()" style="margin-top:14px">重新测试</button>
   </div>
@@ -181,12 +197,7 @@ body{font-family:'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(
   <div class="score-board"><span>得分: <b id="cs">0</b></span></div>
   <div class="game-area">
     <div class="color-word" id="cw">红色</div>
-    <div class="choice-btns">
-      <button class="btn" style="background:#ff0000" onclick="colorGuess('红')">红</button>
-      <button class="btn" style="background:#00ff00" onclick="colorGuess('绿')">绿</button>
-      <button class="btn" style="background:#0000ff" onclick="colorGuess('蓝')">蓝</button>
-      <button class="btn" style="background:#ffff00;color:#333" onclick="colorGuess('黄')">黄</button>
-    </div>
+    <div class="choice-btns" id="colorBtns"></div>
     <div id="cf" style="margin-top:10px;font-size:1.1em"></div>
   </div>
 </div>
@@ -194,7 +205,7 @@ body{font-family:'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(
 <div id="game-breakout" class="game-page">
   <button class="back-btn" onclick="sh()">← 返回</button>
   <h2 class="game-title">🏓 打砖块</h2>
-  <p class="game-desc">用挡板弹球打掉所有砖块！← → 移动挡板</p>
+  <p class="game-desc" id="breakoutHint">用挡板弹球打掉砖块！← → 移动挡板</p>
   <div class="breakout-score">得分: <b id="bs">0</b></div>
   <div class="game-area">
     <div class="breakout-area" id="ba">
@@ -217,6 +228,23 @@ body{font-family:'Segoe UI','PingFang SC',sans-serif;background:linear-gradient(
 </div>
 
 <script>
+// 颜色识别用到的颜色配置
+var colorConfig=[
+  {name:'红',color:'#ff0000'},
+  {name:'绿',color:'#00cc00'},
+  {name:'蓝',color:'#0088ff'},
+  {name:'黄',color:'#ffdd00'},
+  {name:'黑',color:'#000000'},
+  {name:'白',color:'#ffffff'},
+  {name:'粉',color:'#ff69b4'},
+  {name:'橙',color:'#ff8800'}
+];
+
+function updateBreakoutHint(){
+  var isMobile=/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  document.getElementById('breakoutHint').textContent=isMobile?'点击屏幕左右两侧控制挡板！':'用 ← → 键移动挡板，或点击屏幕左右两侧';
+}
+
 function sg(id){
   document.getElementById('home').classList.remove('active');
   document.querySelectorAll('.game-page').forEach(function(p){p.classList.remove('active')});
@@ -224,13 +252,40 @@ function sg(id){
   if(id==='memory')initMem();
   if(id==='tic')initTic();
   if(id==='reaction'){rs='idle';updateRD();}
-  if(id==='type'){tc=0;tw=0;document.getElementById('tc').textContent=0;document.getElementById('tw').textContent=0;document.getElementById('tw2').textContent='ready';document.getElementById('ti').value='';}
-  if(id==='math'){mScore=0;mTimer=60;document.getElementById('ms').textContent=0;document.getElementById('mt2').textContent=60;document.getElementById('mf').textContent='';document.getElementById('mq').textContent='准备好？';clearInterval(mInt);}
-  if(id==='rps'){document.getElementById('rm').textContent='做出你的选择！';document.getElementById('rd').textContent='❓';}
-  if(id==='color'){cScore=0;document.getElementById('cs').textContent=0;nextColor();}
+  if(id==='type'){
+    tc=0;tw=0;
+    document.getElementById('tc').textContent=0;
+    document.getElementById('tw').textContent=0;
+    document.getElementById('tw2').textContent='ready';
+    document.getElementById('ti').value='';
+    document.getElementById('ti').oninput=null;
+  }
+  if(id==='math'){
+    mScore=0;mTimer=60;
+    document.getElementById('ms').textContent=0;
+    document.getElementById('mt2').textContent=60;
+    document.getElementById('mf').textContent='';
+    document.getElementById('mq').textContent='准备好？';
+    clearInterval(mInt);
+  }
+  if(id==='rps'){
+    document.getElementById('rm').textContent='做出你的选择！';
+    document.getElementById('rd').textContent='❓';
+  }
+  if(id==='color'){
+    cScore=0;
+    document.getElementById('cs').textContent=0;
+    nextColor();
+  }
   if(id==='floppy')initFloppy();
-  if(id==='breakout'){bRunning=false;document.getElementById('bbBtn').textContent='开始游戏';initBreakout();}
+  if(id==='breakout'){
+    bRunning=false;
+    document.getElementById('bbBtn').textContent='开始游戏';
+    initBreakout();
+    updateBreakoutHint();
+  }
 }
+
 function sh(){
   document.getElementById('home').classList.add('active');
   document.querySelectorAll('.game-page').forEach(function(p){p.classList.remove('active')});
@@ -246,9 +301,20 @@ function guessSubmit(){
   var hint=document.getElementById('gh');
   if(val===targetNum){
     hint.textContent='🎉';hint.style.color='#38ef7d';
-    setTimeout(function(){alert('恭喜！你用了 '+guessCount+' 次猜中！');targetNum=Math.floor(Math.random()*100)+1;guessCount=0;document.getElementById('gc').textContent=0;hint.textContent='?';hint.style.color='#fff';document.getElementById('gi').value='';},100);
-  }else if(val<targetNum){hint.textContent='⬇️ 更大';hint.style.color='#feca57';
-  }else{hint.textContent='⬆️ 更小';hint.style.color='#48dbfb';}
+    setTimeout(function(){
+      alert('恭喜！你用了 '+guessCount+' 次猜中！');
+      targetNum=Math.floor(Math.random()*100)+1;
+      guessCount=0;
+      document.getElementById('gc').textContent=0;
+      hint.textContent='?';
+      hint.style.color='#fff';
+      document.getElementById('gi').value='';
+    },100);
+  }else if(val<targetNum){
+    hint.textContent='⬆️ 更大';hint.style.color='#feca57';
+  }else{
+    hint.textContent='⬇️ 更小';hint.style.color='#48dbfb';
+  }
 }
 
 // 记忆翻牌
@@ -323,8 +389,20 @@ var typeWords=['apple','banana','orange','python','javascript','function','varia
 var curWord='';
 function nextWord(){curWord=typeWords[Math.floor(Math.random()*typeWords.length)];document.getElementById('tw2').textContent=curWord;document.getElementById('ti').value='';}
 function startType(){
-  tc=0;tw=0;document.getElementById('tc').textContent=0;document.getElementById('tw').textContent=0;nextWord();document.getElementById('ti').focus();
-  document.getElementById('ti').oninput=function(){if(this.value===curWord){tc++;document.getElementById('tc').textContent=tc;this.value='';nextWord();}};
+  tc=0;tw=0;document.getElementById('tc').textContent=0;document.getElementById('tw').textContent=0;nextWord();
+  document.getElementById('ti').focus();
+  document.getElementById('ti').oninput=null;
+  document.getElementById('ti').addEventListener('input',typeInputHandler);
+}
+function typeInputHandler(){
+  var inputEl=document.getElementById('ti');
+  var val=inputEl.value;
+  if(val===curWord){
+    tc++;document.getElementById('tc').textContent=tc;nextWord();
+  }else if(val.length>=curWord.length){
+    tw++;document.getElementById('tw').textContent=tw;
+    inputEl.value='';
+  }
 }
 
 // 猜拳
@@ -343,7 +421,13 @@ function playRPS(you){
 // 井字棋
 var ticB=Array(9).fill(''),ticT='X',ticY=0,ticC2=0,ticD=0;
 var ticW=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-function initTic(){ticB=Array(9).fill('');ticT='X';renderTic();}
+function initTic(){
+  ticB=Array(9).fill('');ticT='X';
+  document.getElementById('ty').textContent=ticY;
+  document.getElementById('tc2').textContent=ticC2;
+  document.getElementById('td').textContent=ticD;
+  renderTic();
+}
 function renderTic(){
   var grid=document.getElementById('tg');grid.innerHTML='';
   ticB.forEach(function(cell,i){
@@ -351,24 +435,32 @@ function renderTic(){
   });
 }
 function ticMove(i){
-  if(ticB[i]||checkTicWin())return;
+  if(ticB[i]||checkTicWin()||isTicFull())return;
   ticB[i]=ticT;renderTic();
-  if(checkTicWin()){setTimeout(function(){alert(ticT+' 胜利！');if(ticT==='X')ticY++;else ticC2++;updateTic();},100);return;}
-  if(ticB.every(function(c){return c;})){setTimeout(function(){alert('平局！');ticD++;updateTic();},100);return;}
+  if(checkTicWin()){
+    setTimeout(function(){
+      var winMsg=ticT==='X'?'你赢了！':'电脑赢了！';
+      if(ticT==='X')ticY++;else ticC2++;
+      alert(winMsg);initTic();
+    },100);return;
+  }
+  if(isTicFull()){
+    setTimeout(function(){alert('平局！');ticD++;initTic();},100);return;
+  }
   ticT=ticT==='X'?'O':'X';
   if(ticT==='O')setTimeout(ticAI,400);
 }
+function isTicFull(){return ticB.every(function(c){return c!=='';});}
 function ticAI(){
   var empty=ticB.map(function(c,i){return c===''?i:-1;}).filter(function(i){return i>=0;});
   if(empty.length===0)return;
   ticB[empty[Math.floor(Math.random()*empty.length)]]='O';
   renderTic();
-  if(checkTicWin()){setTimeout(function(){alert('O 胜利！');ticC2++;updateTic();},100);}
-  else if(ticB.every(function(c){return c;})){setTimeout(function(){alert('平局！');ticD++;updateTic();},100);}
-  else ticT='X';
+  if(checkTicWin()){setTimeout(function(){alert('电脑赢了！');ticC2++;initTic();},100);return;}
+  if(isTicFull()){setTimeout(function(){alert('平局！');ticD++;initTic();},100);return;}
+  ticT='X';
 }
 function checkTicWin(){return ticW.some(function(p){return ticB[p[0]]&&ticB[p[0]]===ticB[p[1]]&&ticB[p[1]]===ticB[p[2]];});}
-function updateTic(){document.getElementById('ty').textContent=ticY;document.getElementById('tc2').textContent=ticC2;document.getElementById('td').textContent=ticD;}
 
 // 反应力
 var rs='idle',rStart=0,bestR=null;
@@ -378,10 +470,7 @@ function updateRD(){
   else if(rs==='waiting'){area.className='reaction-area waiting';area.textContent='等待...';}
   else if(rs==='ready'){area.className='reaction-area ready';area.textContent='立即点击！';}
 }
-function startReaction(){
-  rs='waiting';updateRD();
-  setTimeout(function(){if(rs==='waiting'){rs='ready';rStart=Date.now();updateRD();}},Math.random()*3000+1000);
-}
+function startReaction(){rs='waiting';updateRD();setTimeout(function(){if(rs==='waiting'){rs='ready';rStart=Date.now();updateRD();}},Math.random()*3000+1000);}
 function reactionClick(){
   if(rs==='idle'){startReaction();}
   else if(rs==='ready'){var t=Date.now()-rStart;if(!bestR||t<bestR)bestR=t;document.getElementById('bt').textContent=t;document.getElementById('rm2').textContent=t+' ms';document.getElementById('rm2').style.color='#48dbfb';rs='idle';updateRD();}
@@ -390,73 +479,77 @@ function reactionClick(){
 
 // 颜色识别
 var cScore=0;
-var colorWords=[{t:'红色',c:'#ff0000'},{t:'绿色',c:'#00ff00'},{t:'蓝色',c:'#0000ff'},{t:'黄色',c:'#ffff00'},{t:'黑色',c:'#000000'},{t:'白色',c:'#ffffff'},{t:'粉色',c:'#ff69b4'},{t:'橙色',c:'#ff8c00'}];
 function nextColor(){
-  var word=document.getElementById('cw');
-  var disp=colorWords[Math.floor(Math.random()*colorWords.length)];
-  var ans=colorWords[Math.floor(Math.random()*colorWords.length)];
-  word.textContent=disp.t;word.style.color=disp.c;word.dataset.answer=ans.t;
+  var wordEl=document.getElementById('cw');
+  var btnsContainer=document.getElementById('colorBtns');
+  // 随机选一个文字和颜色（文字和颜色不一样）
+  var textIdx=Math.floor(Math.random()*colorConfig.length);
+  var colorIdx=Math.floor(Math.random()*colorConfig.length);
+  // 确保文字和颜色不一样
+  while(colorIdx===textIdx){
+    colorIdx=Math.floor(Math.random()*colorConfig.length);
+  }
+  var textName=colorConfig[textIdx].name;
+  var showColor=colorConfig[colorIdx].color;
+  wordEl.textContent=textName;
+  wordEl.style.color=showColor;
+  wordEl.dataset.answer=colorConfig[colorIdx].name;
+  // 生成4个按钮，随机选择位置
+  var btnColors=[{name:'红',bg:'#ff0000'},{name:'绿',bg:'#00cc00'},{name:'蓝',bg:'#0088ff'},{name:'黄',bg:'#ffdd00'}];
+  // 随机打乱
+  btnColors.sort(function(){return Math.random()-0.5;});
+  btnsContainer.innerHTML='';
+  btnColors.forEach(function(c){
+    var btn=document.createElement('button');
+    btn.className='btn';
+    btn.style.background=c.bg;
+    btn.textContent=c.name;
+    btn.onclick=function(){colorGuess(c.name);};
+    btnsContainer.appendChild(btn);
+  });
 }
 function colorGuess(guess){
   var answer=document.getElementById('cw').dataset.answer;
   var fb=document.getElementById('cf');
-  var map={'红':'红色','绿':'绿色','蓝':'蓝色','黄':'黄色','黑':'黑色','白':'白色','粉':'粉色','橙':'橙色'};
-  if(map[guess]===answer){cScore++;fb.textContent='✅ 正确';fb.style.color='#38ef7d';}
+  if(guess===answer){cScore++;fb.textContent='✅ 正确';fb.style.color='#38ef7d';}
   else{fb.textContent='❌ 错误，是 '+answer;fb.style.color='#eb3349';}
   document.getElementById('cs').textContent=cScore;
-  setTimeout(nextColor,500);
+  setTimeout(nextColor,800);
 }
-
-// 打砖块
-var bRunning=false,bInt,bX,bY,bDX,bDY,pX,bScore=0,bricks=[];
+var bRunning=false,bInt,bX,bY,bDX,bDY,pX,bScore=0,bricks=[],bAreaWidth=400;
 function initBreakout(){
   clearInterval(bInt);
   var area=document.getElementById('ba');
-  area.querySelectorAll('.brick').forEach(function(b){b.remove();});
   bricks=[];
   var colors=['#ff0000','#ff8c00','#ffff00','#00ff00','#00ffff'];
   for(var row=0;row<5;row++){
     for(var col=0;col<7;col++){
       var brick=document.createElement('div');
-      brick.style.cssText='position:absolute;width:50px;height:20px;top:'+(row*25+10)+'px;left:'+(col*55+10)+'px;background:'+colors[row]+';border-radius:4px';
+      brick.className='brick';
+      var brickW=Math.floor((bAreaWidth-20-6*5)/7);
+      brick.style.cssText='position:absolute;width:'+brickW+'px;height:20px;top:'+(row*25+10)+'px;left:'+(col*(brickW+5)+10)+'px;background:'+colors[row]+';border-radius:4px';
       area.appendChild(brick);
-      bricks.push({el:brick,x:col*55+10,y:row*25+10,w:50,h:20,alive:true});
+      bricks.push({el:brick,x:col*(brickW+5)+10,y:row*25+10,w:brickW,h:20,alive:true});
     }
   }
-  bScore=0;document.getElementById('bs').textContent=0;
-  pX=160;bX=194;bY=270;bDX=3;bDY=-3;
-
-  updateBall();updatePaddle();
+  bScore=0;document.getElementById('bs').textContent=0;pX=160;bX=194;bY=270;bDX=3;bDY=-3;updateBall();updatePaddle();
 }
-function updateBall(){
-  var ball=document.getElementById('bb');
-  ball.style.left=bX+'px';ball.style.top=bY+'px';
-}
-function updatePaddle(){
-  var paddle=document.getElementById('bp');
-  paddle.style.left=pX+'px';
-}
+function updateBall(){var ball=document.getElementById('bb');ball.style.left=bX+'px';ball.style.top=bY+'px';}
+function updatePaddle(){var paddle=document.getElementById('bp');paddle.style.left=pX+'px';}
 function startBreakout(){
-  if(bRunning){
-    bRunning=false;clearInterval(bInt);
-    document.getElementById('bbBtn').textContent='继续';
-    return;
-  }
+  if(bRunning){bRunning=false;clearInterval(bInt);document.getElementById('bbBtn').textContent='继续';return;}
   bRunning=true;document.getElementById('bbBtn').textContent='暂停';
   if(bricks.length===0)initBreakout();
   bInt=setInterval(function(){
     if(!bRunning)return;
     bX+=bDX;bY+=bDY;
-    if(bX<=0||bX>=388)bDX=-bDX;
+    var maxX=bAreaWidth-12;
+    if(bX<=0||bX>=maxX)bDX=-bDX;
     if(bY<=0)bDY=-bDY;
     if(bY>=268&&bY<=280&&bX>=pX&&bX<=pX+80)bDY=-Math.abs(bDY);
     bricks.forEach(function(br){
       if(!br.alive)return;
-      if(bX>=br.x&&bX<=br.x+br.w&&bY>=br.y&&bY<=br.y+br.h){
-        br.alive=false;br.el.style.display='none';
-        bDY=-bDY;bScore+=10;
-        document.getElementById('bs').textContent=bScore;
-      }
+      if(bX>=br.x&&bX<=br.x+br.w&&bY>=br.y&&bY<=br.y+br.h){br.alive=false;br.el.style.visibility='hidden';bDY=-bDY;bScore+=10;document.getElementById('bs').textContent=bScore;}
     });
     if(bY>=290){bRunning=false;clearInterval(bInt);setTimeout(function(){alert('游戏结束！得分: '+bScore);},100);}
     updateBall();
@@ -465,52 +558,25 @@ function startBreakout(){
 document.addEventListener('keydown',function(e){
   if(!document.getElementById('game-breakout').classList.contains('active'))return;
   if(e.key==='ArrowLeft'){pX=Math.max(0,pX-20);updatePaddle();}
-  if(e.key==='ArrowRight'){pX=Math.min(320,pX+20);updatePaddle();}
+  if(e.key==='ArrowRight'){pX=Math.min(bAreaWidth-80,pX+20);updatePaddle();}
 });
-
-// 神经衰弱
+var isMobile=/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+if(isMobile){
+  document.addEventListener('touchstart',function(e){
+    if(!document.getElementById('game-breakout').classList.contains('active'))return;
+    var touch=e.touches[0];
+    var rect=document.getElementById('ba').getBoundingClientRect();
+    var x=touch.clientX-rect.left;
+    if(x<rect.width/2){pX=Math.max(0,pX-40);}else{pX=Math.min(bAreaWidth-80,pX+40);}
+    updatePaddle();
+  },{passive:true});
+}
 var floppyEmojis=['🐴','🐶','🐱','🐭','🐹','🐰','🦊','🐻'];
 var floppyCards=[],floppyRevealed=new Set(),floppyMatched=new Set(),floppyPairs=0,floppyPending=[];
-function initFloppy(){
-  floppyCards=[].concat(floppyEmojis,floppyEmojis).sort(function(){return Math.random()-0.5});
-  floppyRevealed=new Set();floppyMatched=new Set();floppyPairs=0;floppyPending=[];
-  document.getElementById('fp').textContent=0;
-  renderFloppy();
-}
-function renderFloppy(){
-  var grid=document.getElementById('fg');grid.innerHTML='';
-  floppyCards.forEach(function(emo,i){
-    var cell=document.createElement('div');
-    var rev=floppyRevealed.has(i),mat=floppyMatched.has(i);
-    cell.className='floppy-cell'+(rev?' revealed':'')+(mat?' matched':'');
-    cell.textContent=(rev||mat)?emo:'?';
-    cell.onclick=function(){floppyClick(i);};
-    grid.appendChild(cell);
-  });
-}
-function floppyClick(i){
-  if(floppyMatched.has(i)||floppyRevealed.has(i)||floppyPending.length>=2)return;
-  floppyRevealed.add(i);floppyPending.push(i);
-  renderFloppy();
-  if(floppyPending.length===2){
-    setTimeout(function(){
-      if(floppyCards[floppyPending[0]]===floppyCards[floppyPending[1]]){
-        floppyMatched.add(floppyPending[0]);floppyMatched.add(floppyPending[1]);
-        floppyPairs++;document.getElementById('fp').textContent=floppyPairs;
-        if(floppyPairs>=8)setTimeout(function(){alert('🎉 恭喜！你获胜了！');},100);
-      }else{
-        floppyRevealed.delete(floppyPending[0]);floppyRevealed.delete(floppyPending[1]);
-      }
-      floppyPending=[];renderFloppy();
-    },700);
-  }
-}
-
-// 初始化
-document.addEventListener('DOMContentLoaded',function(){
-  initMem();initTic();initFloppy();initBreakout();nextColor();
-});
-
+function initFloppy(){floppyCards=[].concat(floppyEmojis,floppyEmojis).sort(function(){return Math.random()-0.5});floppyRevealed=new Set();floppyMatched=new Set();floppyPairs=0;floppyPending=[];document.getElementById('fp').textContent=0;renderFloppy();}
+function renderFloppy(){var grid=document.getElementById('fg');grid.innerHTML='';floppyCards.forEach(function(emo,i){var cell=document.createElement('div');var rev=floppyRevealed.has(i),mat=floppyMatched.has(i);cell.className='floppy-cell'+(rev?' revealed':'')+(mat?' matched':'');cell.textContent=(rev||mat)?emo:'?';cell.onclick=function(){floppyClick(i);};grid.appendChild(cell);});}
+function floppyClick(i){if(floppyMatched.has(i)||floppyRevealed.has(i)||floppyPending.length>=2)return;floppyRevealed.add(i);floppyPending.push(i);renderFloppy();if(floppyPending.length===2){setTimeout(function(){if(floppyCards[floppyPending[0]]===floppyCards[floppyPending[1]]){floppyMatched.add(floppyPending[0]);floppyMatched.add(floppyPending[1]);floppyPairs++;document.getElementById('fp').textContent=floppyPairs;if(floppyPairs>=8)setTimeout(function(){alert('🎉 恭喜！你获胜了！');},100);}else{floppyRevealed.delete(floppyPending[0]);floppyRevealed.delete(floppyPending[1]);}floppyPending=[];renderFloppy();},700);}}
+document.addEventListener('DOMContentLoaded',function(){initMem();initTic();initFloppy();initBreakout();nextColor();});
 </script>
 </body>
 </html>

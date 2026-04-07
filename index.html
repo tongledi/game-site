@@ -483,27 +483,40 @@ var cScore=0;
 function nextColor(){
   var wordEl=document.getElementById('cw');
   var btnsContainer=document.getElementById('colorBtns');
-  // 随机选一个文字和颜色（文字和颜色不一样）
+  // 随机选一个文字和显示颜色（确保不一样）
   var textIdx=Math.floor(Math.random()*colorConfig.length);
   var colorIdx=Math.floor(Math.random()*colorConfig.length);
-  // 确保文字和颜色不一样
   while(colorIdx===textIdx){
     colorIdx=Math.floor(Math.random()*colorConfig.length);
   }
   var textName=colorConfig[textIdx].name;
-  var showColor=colorConfig[colorIdx].color;
+  var answerName=colorConfig[colorIdx].name;
   wordEl.textContent=textName;
-  wordEl.style.color=showColor;
-  wordEl.dataset.answer=colorConfig[colorIdx].name;
-  // 生成4个按钮，随机选择位置
-  var btnColors=[{name:'红',bg:'#ff0000'},{name:'绿',bg:'#00cc00'},{name:'蓝',bg:'#0088ff'},{name:'黄',bg:'#ffdd00'}];
-  // 随机打乱
-  btnColors.sort(function(){return Math.random()-0.5;});
+  wordEl.style.color=colorConfig[colorIdx].color;
+  wordEl.dataset.answer=answerName;
+  // 生成4个按钮：包含正确答案 + 3个其他随机颜色
+  var allColors=[
+    {name:'红',bg:'#ff0000'},
+    {name:'绿',bg:'#00cc00'},
+    {name:'蓝',bg:'#0088ff'},
+    {name:'黄',bg:'#ffdd00'},
+    {name:'黑',bg:'#333333'},
+    {name:'白',bg:'#eeeeee',textColor:'#333'},
+    {name:'粉',bg:'#ff69b4'},
+    {name:'橙',bg:'#ff8800'}
+  ];
+  // 找出答案按钮
+  var answerBtn=allColors.find(function(c){return c.name===answerName;});
+  // 随机选3个不同的其他颜色
+  var otherColors=allColors.filter(function(c){return c.name!==answerName;}).sort(function(){return Math.random()-0.5;}).slice(0,3);
+  // 组合并打乱
+  var btnColors=[answerBtn].concat(otherColors).sort(function(){return Math.random()-0.5;});
   btnsContainer.innerHTML='';
   btnColors.forEach(function(c){
     var btn=document.createElement('button');
     btn.className='btn';
     btn.style.background=c.bg;
+    if(c.textColor)btn.style.color=c.textColor;
     btn.textContent=c.name;
     btn.onclick=function(){colorGuess(c.name);};
     btnsContainer.appendChild(btn);
